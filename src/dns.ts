@@ -1,13 +1,7 @@
 import fs from 'fs';
 
-export async function add_node(node_addr: string) {
+export async function add_node(node_addr: string, rpc_port: string, receiver_port: string ) {
 
-
-    // fs.readFile('nodes.json', 'UTF-8', async(err, data) => {
-    //     if(err){
-
-    //     }
-    // })
     var resp = "";
 
     var ex_nodes: Array<any> = await get_nodes();
@@ -22,7 +16,9 @@ export async function add_node(node_addr: string) {
     }
 
     let node = {
-        "addr" : node_addr
+        "addr" : node_addr,
+        "rpc_port" : rpc_port,
+        "receiver_port" : receiver_port
     };
 
     ex_nodes.push(node);

@@ -16,7 +16,9 @@ app.use(helmet())
 app.post(`/add_node`, (req, res) => {
     var node_ip=req.body.node_ip
     var node_port=req.body.node_port
-    add_node(node_port+":"+node_ip)
+    var rpc_port=req.body.rpc_port
+    var receiver_port=req.body.receiver_port
+    add_node(node_ip+":"+node_port, rpc_port, receiver_port)
     return res.send({
         status: "Node added"
     })
