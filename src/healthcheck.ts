@@ -1,17 +1,16 @@
-import { get_nodes, remove_node } from "./dns";
+import Node from "./models/Node";
+import dgram from "dgram"
 
 export function a() {setInterval(async function(){
 
     console.log("running")
-    var ex_nodes: Array<any> = await get_nodes();
+    var ex_nodes: Array<any> = await Node.scan();
 
     for (let i = 0; i < ex_nodes.length; i++)
     {
         // Send Ping
-        var PORT = ex_nodes[i].node_port;
+        var PORT = ex_nodes[i].reciever_port;
         var HOST = ex_nodes[i].node_ip;
-
-        var dgram = require('dgram');
         var message = new Buffer('Are you active?');
 
         var client = dgram.createSocket('udp4');
@@ -25,8 +24,6 @@ export function a() {setInterval(async function(){
         // Recieve Pong
         var rPORT = 3333;//port of dns
         var rHOST = '127.0.0.1';//host of dns
-
-        var dgram = require('dgram');
         var server = dgram.createSocket('udp4');
 
         server.on('listening', function() {
@@ -38,12 +35,13 @@ export function a() {setInterval(async function(){
         console.log(remote.address + ':' + remote.port +' - ' + message);
         if (message === "yes"){}
         else{ 
-            remove_node(remote.address, remote.port);
+
+            Node.remove_by_addr(remote.address);
         }
             
         });
         server.bind(rPORT, rHOST);
     }
 
-}, 1000);
+}, 1000 * 60 * 10);
 }
