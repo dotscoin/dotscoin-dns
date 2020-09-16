@@ -28,7 +28,8 @@ app.get("/", (req, res) => {
 
 app.post(`/add_node`, async (req, res) => {
     let node = Node.from_json(req.body)
-    node.save()
+    await node.save()
+    app.locals.nodes = await Node.scan()
     return res.send({
         status: "Node added"
     })

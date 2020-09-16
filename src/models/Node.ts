@@ -45,11 +45,12 @@ export default class Node {
 
     ex_nodes.push(node);
 
-    fs.writeFile("nodes.json", JSON.stringify(ex_nodes), (err: any) => {
-      if (err) throw err;
-      resp = "node added";
-      return resp;
-    });
+    return new Promise((resolve) => {
+      fs.writeFile("nodes.json", JSON.stringify(ex_nodes), (err: any) => {
+        if (err) throw err;
+        resolve();
+      });
+    })
   }
 
   async load() {
