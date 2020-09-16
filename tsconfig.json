@@ -6,7 +6,7 @@
       "typeRoots": ["node_modules/@types"],
       "experimentalDecorators": true,
       "strict": true,
-      "lib": ["ES6"],
+      "lib": ["ES6", "DOM"],
       "moduleResolution": "node",
       "downlevelIteration": true,
       "rootDir": "src",

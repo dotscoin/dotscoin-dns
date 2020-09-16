@@ -74,7 +74,7 @@ export default class Node {
     });
   }
 
-  static async scan(): Promise<Array<any>> {
+  static async scan(): Promise<Array<Node>> {
     let nodes: Array<any> = [];
 
     return new Promise((resolve) => {

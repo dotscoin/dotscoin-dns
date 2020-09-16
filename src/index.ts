@@ -7,6 +7,7 @@ import cors from "cors";
 import compression from "compression";
 import helmet from "helmet";
 import Node from "./models/Node";
+import { broadcast_pings } from "./healthcheck"
 
 const app = express()
 const server = http.createServer(app)
@@ -34,21 +35,19 @@ app.post(`/add_node`, async (req, res) => {
 })
 
 app.get("/get_nodes", async (_, res) => {
-    var nodes = await Node.scan()
     return res.send({
-        nodes: nodes,
+        nodes: app.locals.nodes
     })
 })
 
-server.listen(PORT, () => console.log(`Server started at port ${PORT}`));
-
 udpserver.on('error', (err) => {
     console.log(`server error:\n${err.stack}`);
-    server.close();
+    udpserver.close();
 });
 
 udpserver.on('message', (msg, rinfo) => {
-    console.log(`server got: ${msg} from ${rinfo.address}:${rinfo.port}`);
+    console.log(rinfo.address)
+    console.log(msg);
 });
 
 udpserver.on('listening', () => {
@@ -57,6 +56,12 @@ udpserver.on('listening', () => {
     console.log(`server listening ${address?.address}:${address?.port}`);
 });
 
+setInterval(() => broadcast_pings(), 1000 * 60 * 10)
+
+server.listen(PORT, async () => {
+    console.log(`Server started at port ${PORT}`)
+    app.locals.nodes = await Node.scan()
+});
 udpserver.bind(6500);
 
 export default server;
