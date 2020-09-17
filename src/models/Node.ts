@@ -25,19 +25,17 @@ export default class Node {
       ip_addr: this.ip_addr,
       receiver_port: this.receiver_port,
       rpc_port: this.rpc_port,
-      storage_port: this.storage_port
+      storage_port: this.storage_port,
     };
   }
 
   async save() {
-    var resp = "";
-
-    var ex_nodes: Array<any> = await Node.scan();
+    let ex_nodes: Array<any> = await Node.scan();
 
     for (let i = 0; i < ex_nodes.length; i++) {
       if (ex_nodes[i].ip_addr === this.ip_addr) {
-        resp = "Node already present";
-        return resp;
+        ex_nodes[i] = this.to_json();
+        return;
       }
     }
 
@@ -50,7 +48,7 @@ export default class Node {
         if (err) throw err;
         resolve();
       });
-    })
+    });
   }
 
   async load() {
@@ -68,7 +66,7 @@ export default class Node {
               self.storage_port = node.storage_port;
               resolve();
             }
-          })
+          });
           resolve();
         }
       });
@@ -107,7 +105,6 @@ export default class Node {
       return resp;
     });
   }
-
 
   async remove() {
     var ex_nodes: Array<any> = await Node.scan();

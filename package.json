@@ -13,6 +13,7 @@
     "@types/expect": "^24.3.0",
     "@types/express": "^4.17.8",
     "@types/istanbul-lib-coverage": "^2.0.3",
+    "@types/istanbul-reports": "^3.0.0",
     "@types/mocha": "^8.0.3",
     "@types/node": "^14.6.4",
     "chai": "^4.2.0",

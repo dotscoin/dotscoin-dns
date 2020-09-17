@@ -48,7 +48,8 @@ udpserver.on('error', (err) => {
 
 udpserver.on('message', (msg, rinfo) => {
     console.log(rinfo.address)
-    console.log(msg);
+    console.log(msg.toString());
+    app.locals.blacklist.delete(rinfo.address);
 });
 
 udpserver.on('listening', () => {
@@ -57,11 +58,12 @@ udpserver.on('listening', () => {
     console.log(`server listening ${address?.address}:${address?.port}`);
 });
 
-setInterval(() => broadcast_pings(), 1000 * 60 * 10)
+setInterval(() => broadcast_pings(app), 1000 * 60 * 10)
 
 server.listen(PORT, async () => {
     console.log(`Server started at port ${PORT}`)
     app.locals.nodes = await Node.scan()
+    app.locals.blacklist = new Set()
 });
 udpserver.bind(6500);
 
