@@ -58,7 +58,7 @@ udpserver.on('listening', () => {
     console.log(`server listening ${address?.address}:${address?.port}`);
 });
 
-setInterval(() => broadcast_pings(app), 1000 * 60 * 10)
+setInterval(() => broadcast_pings(app), 1000 * 60 * 5)
 
 server.listen(PORT, async () => {
     console.log(`Server started at port ${PORT}`)

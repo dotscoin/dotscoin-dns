@@ -2,10 +2,11 @@ import Node from "./models/Node";
 import dgram from "dgram";
 import { Application } from "express";
 
-function remove_nodes(app: Application) {
+async function remove_nodes(app: Application) {
   for (let i = 0; i < app.locals.nodes.length; i++) {
     if (app.locals.blacklist.has(app.locals.nodes[i].ip_addr)) {
       app.locals.blacklist.delete(app.locals.nodes[i].ip_addr);
+      await Node.remove_by_addr(app.locals.nodes[i].ip_addr);
       app.locals.nodes.splice(i, 1);
     }
   }
@@ -13,7 +14,7 @@ function remove_nodes(app: Application) {
 
 export async function broadcast_pings(app: Application) {
   console.log("Health check started");
-  remove_nodes(app);
+  await remove_nodes(app);
   let nodes: Array<Node> = app.locals.nodes;
   const message = Buffer.from(
     JSON.stringify({
