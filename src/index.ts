@@ -28,6 +28,7 @@ app.get("/", (req, res) => {
 })
 
 app.post(`/add_node`, async (req, res) => {
+    console.log(req.ip)
     let node = Node.from_json({
         ip_addr: req.ip.replace("::ffff:", ""),
         ...req.body
