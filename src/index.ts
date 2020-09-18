@@ -20,6 +20,7 @@ app.use(compression())
 app.use(helmet())
 
 app.get("/", (req, res) => {
+    console.log(req.ip.replace("::ffff:", ""))
     return res.send({
         status: "online",
         host: req.headers.host
@@ -27,7 +28,10 @@ app.get("/", (req, res) => {
 })
 
 app.post(`/add_node`, async (req, res) => {
-    let node = Node.from_json(req.body)
+    let node = Node.from_json({
+        ip_addr: req.ip.replace("::ffff:", ""),
+        ...req.body
+    })
     await node.save()
     app.locals.nodes = await Node.scan()
     return res.send({
