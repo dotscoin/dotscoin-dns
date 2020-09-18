@@ -28,7 +28,11 @@ app.get("/", (req, res) => {
 })
 
 app.post(`/add_node`, async (req, res) => {
-    console.log(req.ip)
+    if(req.body.ip_addr == "127.0.0.1" || req.body.ip_addr == "localhost") {
+        return res.send({
+            status: "Node not added"
+        })
+    }
     let node = Node.from_json({
         ip_addr: req.ip.replace("::ffff:", ""),
         ...req.body
